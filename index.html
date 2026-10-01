@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>幸運物語 ｜ 緣結の飯糰</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700;900&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- 背景飄落環境畫布（櫻花瓣與金色微塵） -->
+  <canvas id="ambientCanvas"></canvas>
+
+  <!-- 音效切換控制鈕 -->
+  <button id="soundToggle" class="sound-toggle" title="切換音效" aria-label="切換音效">
+    <span class="sound-icon">🔔</span>
+    <span class="sound-text">和風音效：開</span>
+  </button>
+
+  <div class="card-container" id="mainCard">
+    <!-- 主視覺區：純 CSS 刻製飯糰、光暈與互動表情 -->
+    <header class="hero-section">
+      <!-- 懸停與點擊擴散光暈 -->
+      <div class="glow-bg" id="glowBg"></div>
+
+      <!-- 飯糰本體（包含懸停搖晃、注視跟隨與點擊彈跳） -->
+      <div class="onigiri" id="onigiriHero" role="button" tabindex="0" title="點我沾沾福氣！">
+        <!-- 靠近提示泡泡 -->
+        <div class="hover-bubble" id="hoverBubble">戳我一下沾沾福氣 ✨</div>
+
+        <div class="rice-body" id="riceBody">
+          <!-- 米粒光澤微質感 -->
+          <div class="rice-shine"></div>
+
+          <!-- 海苔部分 -->
+          <div class="nori">
+            <div class="nori-texture"></div>
+          </div>
+
+          <!-- 靈動五官（支援眼神跟隨與表情切換） -->
+          <div class="face-group" id="faceGroup">
+            <div class="eye eye-left"></div>
+            <div class="eye eye-right"></div>
+            <div class="blush blush-left"></div>
+            <div class="blush blush-right"></div>
+            <div class="mouth"></div>
+          </div>
+
+          <!-- 頭頂幸運星芒 -->
+          <div class="sparkle">✦</div>
+        </div>
+      </div>
+
+      <!-- 標題與意境副標 -->
+      <h1 class="title">緣結の飯糰</h1>
+      <p class="subtitle">雙手相扣的溫度 · 繫起所有的美好與緣分</p>
+
+      <!-- 福氣計數指示器 -->
+      <div class="blessing-badge">
+        <span class="badge-icon">🍙</span>
+        <span>今日已凝聚緣結福氣：</span>
+        <strong id="blessingCount">0</strong>
+        <span>份</span>
+      </div>
+    </header>
+
+    <!-- 故事說明區 -->
+    <main class="content-section">
+      <article class="story-block">
+        <div class="washi-pattern-top"></div>
+        <h2 class="section-title">【 由來與底蘊 】</h2>
+        <p class="story-desc">
+          在日文裡，飯糰亦被稱作「御結び（Musubi）」。傳說古時人們將白米捏塑成宛如山嶽的三角形，祈求神明賜予豐收與庇佑。每一顆飯糰皆由手心一握一握成形，不僅盛裝了大地飽滿的米香，更封存著製作者深深的祝福。
+        </p>
+      </article>
+
+      <!-- 象徵意涵三卡片區（支援 3D 懸停傾斜、主題光暈與點擊收集） -->
+      <section class="symbol-grid">
+        <!-- 卡片 1：豐收飽滿 -->
+        <div class="symbol-item symbol-harvest" data-type="harvest" tabindex="0">
+          <div class="symbol-card-inner">
+            <div class="icon-wrap">
+              <span class="icon wheat-icon">🌾</span>
+            </div>
+            <h3>豐收飽滿</h3>
+            <p>聚沙成塔的米粒，象徵努力積累終將化為實質收穫。</p>
+            <div class="card-action-hint">點擊收下豐收</div>
+            <div class="stamp-mark">已結緣</div>
+          </div>
+        </div>
+
+        <!-- 卡片 2：緣分相繫 -->
+        <div class="symbol-item symbol-bonds" data-type="bonds" tabindex="0">
+          <div class="symbol-card-inner">
+            <div class="icon-wrap">
+              <span class="icon star-icon">✨</span>
+            </div>
+            <h3>緣分相繫</h3>
+            <p>「結」字寓意牽絆，連結身邊所有珍貴的善緣與溫暖。</p>
+            <div class="card-action-hint">點擊收下善緣</div>
+            <div class="stamp-mark">已結緣</div>
+          </div>
+        </div>
+
+        <!-- 卡片 3：安心守護 -->
+        <div class="symbol-item symbol-peace" data-type="peace" tabindex="0">
+          <div class="symbol-card-inner">
+            <div class="icon-wrap">
+              <span class="icon tea-icon">🍵</span>
+              <span class="steam steam-1"></span>
+              <span class="steam steam-2"></span>
+            </div>
+            <h3>安心守護</h3>
+            <p>簡樸而踏實的存在，給予隨時向前邁步的踏實力量。</p>
+            <div class="card-action-hint">點擊收下守護</div>
+            <div class="stamp-mark">已結緣</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 抽取今日御結籤互動區 -->
+      <div class="omikuji-trigger-area">
+        <button id="drawOmikujiBtn" class="omikuji-btn">
+          <span class="btn-sparkle">✦</span>
+          <span>搖搖飯糰 · 領取今日御結籤</span>
+          <span class="btn-sparkle">✦</span>
+        </button>
+      </div>
+    </main>
+
+    <!-- 頁尾 -->
+    <footer class="footer-section">
+      <p class="footer-text">願每一次手中緊握的溫度，都能化作心中堅定前行的幸運。</p>
+    </footer>
+  </div>
+
+  <!-- 御神籤彈出視窗（Omikuji Modal） -->
+  <div id="omikujiModal" class="omikuji-modal" aria-hidden="true">
+    <div class="omikuji-overlay" id="omikujiOverlay"></div>
+    <div class="omikuji-card">
+      <button class="omikuji-close" id="omikujiClose" aria-label="關閉籤詩">✕</button>
+      <div class="omikuji-header">
+        <span class="omikuji-tanzaku">御神籤</span>
+        <h3 id="omikujiRank" class="omikuji-rank">【 大吉 · 緣結圓滿 】</h3>
+      </div>
+      <div class="omikuji-body">
+        <p class="omikuji-quote" id="omikujiQuote">「心念真誠如稻穗，低頭處皆是圓滿與善緣。」</p>
+        <div class="omikuji-details">
+          <div class="detail-pill">
+            <span class="pill-label">幸運御守</span>
+            <span class="pill-value" id="omikujiItem">海苔御結飯糰</span>
+          </div>
+          <div class="detail-pill">
+            <span class="pill-label">今日幸運色</span>
+            <span class="pill-value" id="omikujiColor">和風米白色</span>
+          </div>
+        </div>
+      </div>
+      <div class="omikuji-footer">
+        <button id="redrawBtn" class="redraw-btn">再抽一次</button>
+        <button id="acceptBtn" class="accept-btn">收下這份好運 ✨</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
